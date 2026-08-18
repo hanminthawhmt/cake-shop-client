@@ -11,6 +11,7 @@ import { OrderDetailPage } from '../features/orders/pages/OrderDetailPage'
 import { RoomListPage } from '../features/rooms/pages/RoomListPage'
 import { RoomDetailPage } from '../features/rooms/pages/RoomDetailPage'
 import { ReservationListPage } from '../features/reservations/pages/ReservationListPage'
+import { ReservationDetailPage } from '../features/reservations/pages/ReservationDetailPage'
 
 export const AppRouter: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ export const AppRouter: React.FC = () => {
       <Route path="/rooms" element={<RoomListPage />} />
       <Route path="/rooms/:id" element={<RoomDetailPage />} />
       <Route path="/reservations" element={<ReservationListPage />} />
+      <Route path="/reservations/:id" element={<ReservationDetailPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/orders" element={<OrderListPage />} />

@@ -3,19 +3,10 @@ import { Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchReservations, cancelReservation } from '../../../api/reservations'
 import { useAuth } from '../../../context/AuthContext'
-import type { ReservationStatus } from '../../../types/room'
 import { Header } from '../../../components/layout/Header'
 import { Footer } from '../../../components/layout/Footer'
-import {
-  Calendar,
-  Clock,
-  Users,
-  Sparkles,
-  AlertCircle,
-  XCircle,
-  CheckCircle2,
-  MessageSquare,
-} from 'lucide-react'
+import { ReservationCard } from '../components/ReservationCard'
+import { Calendar, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export const ReservationListPage: React.FC = () => {
   const { isLoggedIn } = useAuth()
@@ -29,11 +20,11 @@ export const ReservationListPage: React.FC = () => {
     isError,
   } = useQuery({
     queryKey: ['reservations'],
-    queryFn: () => fetchReservations(),
+    queryFn: fetchReservations,
     enabled: isLoggedIn,
   })
 
-  // Cancel Reservation Mutation
+  // Cancel Mutation
   const cancelMutation = useMutation({
     mutationFn: (id: number) => cancelReservation(id),
     onSuccess: () => {
@@ -55,45 +46,6 @@ export const ReservationListPage: React.FC = () => {
     const confirmed = window.confirm(`Are you sure you want to cancel Reservation #${id}?`)
     if (confirmed) {
       cancelMutation.mutate(id)
-    }
-  }
-
-  const renderStatusBadge = (status: ReservationStatus) => {
-    switch (status) {
-      case 'confirmed':
-        return (
-          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-full">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-            Confirmed
-          </span>
-        )
-      case 'pending':
-        return (
-          <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold px-3 py-1 rounded-full">
-            <Clock className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
-            Pending Approval
-          </span>
-        )
-      case 'completed':
-        return (
-          <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-900 border border-purple-200 text-xs font-bold px-3 py-1 rounded-full">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-            Completed
-          </span>
-        )
-      case 'cancelled':
-        return (
-          <span className="inline-flex items-center gap-1 bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold px-3 py-1 rounded-full">
-            <XCircle className="w-3.5 h-3.5 text-rose-600" />
-            Cancelled
-          </span>
-        )
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 bg-gray-50 text-gray-800 border border-gray-200 text-xs font-bold px-3 py-1 rounded-full">
-            {status}
-          </span>
-        )
     }
   }
 
@@ -136,7 +88,7 @@ export const ReservationListPage: React.FC = () => {
           </div>
         )}
 
-        {/* Loading State */}
+        {/* Loading Skeletons */}
         {isLoading && (
           <div className="space-y-4 animate-pulse">
             {[1, 2].map((n) => (
@@ -152,13 +104,19 @@ export const ReservationListPage: React.FC = () => {
             <h3 className="text-lg font-bold text-red-900 mb-1">
               Unable to Load Reservations
             </h3>
-            <p className="text-xs text-red-700">
+            <p className="text-xs text-red-700 mb-4">
               Please check your login session and try again.
             </p>
+            <Link
+              to="/login?redirect=/reservations"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4A2E2B] text-white rounded-xl text-xs font-bold"
+            >
+              Sign In Again
+            </Link>
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Empty State pointing to Room Browsing */}
         {!isLoading && (!isLoggedIn || sortedReservations.length === 0) && (
           <div className="bg-white rounded-3xl p-10 sm:p-14 border border-[#F4E6E4] text-center max-w-lg mx-auto my-8 shadow-xs space-y-5">
             <div className="w-20 h-20 bg-[#FDF0F2] rounded-full flex items-center justify-center mx-auto text-[#D86A78] shadow-2xs">
@@ -166,7 +124,7 @@ export const ReservationListPage: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-[#3B2219]">No Reservations Found</h2>
+              <h2 className="text-2xl font-black text-[#3B2219]">No Reservations Yet</h2>
               <p className="text-xs sm:text-sm text-[#7C5C54] leading-relaxed max-w-md mx-auto">
                 {!isLoggedIn
                   ? 'Please sign in to view your birthday room reservations.'
@@ -189,66 +147,14 @@ export const ReservationListPage: React.FC = () => {
         {/* Reservations List */}
         {!isLoading && isLoggedIn && sortedReservations.length > 0 && (
           <div className="space-y-4">
-            {sortedReservations.map((res) => {
-              const isCancellable = res.status !== 'completed' && res.status !== 'cancelled'
-
-              return (
-                <div
-                  key={res.id}
-                  className="bg-white rounded-3xl p-5 sm:p-6 border border-[#F4E6E4] shadow-2xs space-y-4"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F7EFEF] pb-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-extrabold text-base sm:text-lg text-[#3B2219]">
-                          Reservation #{res.id}
-                        </h3>
-                        {renderStatusBadge(res.status)}
-                      </div>
-                      <span className="text-xs font-semibold text-[#8C6057]">
-                        Room #{res.roomId}
-                      </span>
-                    </div>
-
-                    {isCancellable && (
-                      <button
-                        type="button"
-                        onClick={() => handleCancel(res.id)}
-                        disabled={cancelMutation.isPending}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs font-bold text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer self-start sm:self-auto"
-                      >
-                        <XCircle className="w-3.5 h-3.5 text-rose-600" />
-                        <span>Cancel Reservation</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-[#7C5C54]">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-[#D86A78]" />
-                      <span>Date: <strong className="text-[#3B2219]">{res.date}</strong></span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-[#D86A78]" />
-                      <span>Slot: <strong className="text-[#3B2219]">{res.timeSlot}</strong></span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-[#D86A78]" />
-                      <span>Guests: <strong className="text-[#3B2219]">{res.guestCount} guests</strong></span>
-                    </div>
-                  </div>
-
-                  {res.birthdayRequirements && (
-                    <div className="bg-[#FAF7F5] border border-[#EFE2E0] p-3 rounded-2xl text-xs text-[#8C6057] flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4 text-[#D86A78] shrink-0" />
-                      <span>"{res.birthdayRequirements}"</span>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+            {sortedReservations.map((res) => (
+              <ReservationCard
+                key={res.id}
+                reservation={res}
+                onCancel={handleCancel}
+                isCancelling={cancelMutation.isPending}
+              />
+            ))}
           </div>
         )}
       </main>
