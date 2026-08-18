@@ -6,6 +6,8 @@ import { LoginPage } from '../features/auth/pages/LoginPage'
 import { SignupPage } from '../features/auth/pages/SignupPage'
 import { CartPage } from '../features/cart/pages/CartPage'
 import { CheckoutPage } from '../features/checkout/pages/CheckoutPage'
+import { OrderListPage } from '../features/orders/pages/OrderListPage'
+import { OrderDetailPage } from '../features/orders/pages/OrderDetailPage'
 
 export const AppRouter: React.FC = () => {
   return (
@@ -15,6 +17,8 @@ export const AppRouter: React.FC = () => {
       <Route path="/cakes/:id" element={<CakeDetailPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/orders" element={<OrderListPage />} />
+      <Route path="/orders/:id" element={<OrderDetailPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="*" element={<Navigate to="/cakes" replace />} />
