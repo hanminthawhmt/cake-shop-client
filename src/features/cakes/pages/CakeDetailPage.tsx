@@ -3,6 +3,7 @@ import { useParams, Link, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCakeById } from '../../../api/cakes'
 import { useAuth } from '../../../context/AuthContext'
+import { useCart } from '../../../hooks/useCart'
 import { Header } from '../../../components/layout/Header'
 import { Footer } from '../../../components/layout/Footer'
 import { CakeImageGallery } from '../components/CakeImageGallery'
@@ -102,24 +103,36 @@ export const CakeDetailPage: React.FC = () => {
   }, [unitPrice, quantity])
 
   const { isLoggedIn } = useAuth()
+  const { addItem, isAdding } = useCart()
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!isLoggedIn) {
       setShowAuthModal(true)
       return
     }
 
-    // Customer is logged in - simulate cart payload structure
-    const selectedValueIds = Object.values(selectedOptionValues)
-    setAddedSuccessMsg(
-      `Successfully added ${quantity}x "${cake?.name}" ($${totalPrice.toFixed(2)}) to your cart!`
-    )
-    console.log('Cart payload prepared:', {
-      cakeId: cake?.id,
-      quantity,
-      notes,
-      selectedValueIds,
-    })
+    try {
+      const selectedValueIds = Object.values(selectedOptionValues)
+      await addItem({
+        cakeId: cakeId,
+        quantity,
+        notes: notes.trim() !== '' ? notes.trim() : undefined,
+        selectedValueIds,
+      })
+
+      setAddedSuccessMsg(
+        `Successfully added ${quantity}x "${cake?.name}" ($${totalPrice.toFixed(2)}) to your cart!`
+      )
+
+      // Auto dismiss success toast after 5 seconds
+      setTimeout(() => {
+        setAddedSuccessMsg(null)
+      }, 5000)
+    } catch (err: any) {
+      console.error('Failed to add item to cart:', err)
+      const errorText = err?.response?.data?.message || 'Failed to add item to cart. Please try again.'
+      alert(Array.isArray(errorText) ? errorText.join(', ') : errorText)
+    }
   }
 
   return (
@@ -305,12 +318,16 @@ export const CakeDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                disabled={!cake.isAvailable}
+                disabled={!cake.isAvailable || isAdding}
                 className="w-full py-4 px-6 bg-[#4A2E2B] hover:bg-[#38221E] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-2xl font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
               >
                 <ShoppingBag className="w-5 h-5" />
                 <span>
-                  {cake.isAvailable ? `Add to Cart — $${totalPrice.toFixed(2)}` : 'Currently Unavailable'}
+                  {isAdding
+                    ? 'Adding to Cart...'
+                    : cake.isAvailable
+                    ? `Add to Cart — $${totalPrice.toFixed(2)}`
+                    : 'Currently Unavailable'}
                 </span>
               </button>
             </div>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useCart } from '../../hooks/useCart'
 import { ShoppingBag, Cake, Calendar, User as UserIcon, LogOut, UserPlus, LogIn } from 'lucide-react'
 
 export const Header: React.FC = () => {
   const location = useLocation()
   const { user, isLoggedIn, logout } = useAuth()
+  const { totalCount } = useCart()
   const [showUserMenu, setShowUserMenu] = useState(false)
 
   const isActive = (path: string) => {
@@ -65,9 +67,11 @@ export const Header: React.FC = () => {
             aria-label="Shopping Cart"
           >
             <ShoppingBag className="w-5 h-5 text-[#6E4E46]" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#D86A78] text-white text-[10px] font-black rounded-full flex items-center justify-center">
-              0
-            </span>
+            {isLoggedIn && totalCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#D86A78] text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-xs">
+                {totalCount}
+              </span>
+            )}
           </Link>
 
           {/* User Auth Section */}
