@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCakeById } from '../../../api/cakes'
+import { useAuth } from '../../../context/AuthContext'
 import { Header } from '../../../components/layout/Header'
 import { Footer } from '../../../components/layout/Footer'
 import { CakeImageGallery } from '../components/CakeImageGallery'
@@ -100,10 +101,7 @@ export const CakeDetailPage: React.FC = () => {
     return unitPrice * quantity
   }, [unitPrice, quantity])
 
-  // Auth check
-  const isLoggedIn = useMemo(() => {
-    return Boolean(localStorage.getItem('petal_cocoa_token'))
-  }, [])
+  const { isLoggedIn } = useAuth()
 
   const handleAddToCart = () => {
     if (!isLoggedIn) {

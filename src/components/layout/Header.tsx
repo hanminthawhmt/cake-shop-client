@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { ShoppingBag, Cake, Calendar, User } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
+import { ShoppingBag, Cake, Calendar, User as UserIcon, LogOut, UserPlus, LogIn } from 'lucide-react'
 
 export const Header: React.FC = () => {
   const location = useLocation()
+  const { user, isLoggedIn, logout } = useAuth()
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   const isActive = (path: string) => {
     return location.pathname === path || (path === '/cakes' && location.pathname === '/')
@@ -54,7 +57,7 @@ export const Header: React.FC = () => {
           </Link>
         </nav>
 
-        {/* Right Actions */}
+        {/* Right Actions: Cart & Auth */}
         <div className="flex items-center gap-3">
           <Link
             to="/cart"
@@ -67,13 +70,63 @@ export const Header: React.FC = () => {
             </span>
           </Link>
 
-          <Link
-            to="/login"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-[#4A2E2B] hover:bg-[#38221E] text-white text-xs font-bold transition-colors shadow-xs"
-          >
-            <User className="w-3.5 h-3.5" />
-            <span>Sign In</span>
-          </Link>
+          {/* User Auth Section */}
+          {isLoggedIn ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowUserMenu((prev) => !prev)}
+                className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#FAF2F0] hover:bg-[#F3E2E0] border border-[#EFE2E0] transition-colors cursor-pointer"
+              >
+                <div className="w-7 h-7 rounded-xl bg-[#D86A78] text-white flex items-center justify-center font-bold text-xs">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : <UserIcon className="w-4 h-4" />}
+                </div>
+                <span className="hidden sm:inline-block text-xs font-bold text-[#3B2219] max-w-[120px] truncate">
+                  {user?.name || 'Customer'}
+                </span>
+              </button>
+
+              {/* User Dropdown Menu */}
+              {showUserMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl border border-[#F4E6E4] shadow-xl p-2 z-50 animate-fade-in">
+                  <div className="px-3 py-2 border-b border-[#F7EFEF] mb-1">
+                    <p className="text-xs font-bold text-[#3B2219] truncate">{user?.name}</p>
+                    <p className="text-[11px] text-[#8C6057] truncate">{user?.email}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout()
+                      setShowUserMenu(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl flex items-center gap-2 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                to={`/login?redirect=${encodeURIComponent(location.pathname)}`}
+                className="px-3.5 py-2 rounded-2xl bg-[#FAF2F0] hover:bg-[#F3E2E0] text-[#3B2219] text-xs font-bold transition-colors flex items-center gap-1.5 border border-[#EFE2E0]"
+              >
+                <LogIn className="w-3.5 h-3.5 text-[#D86A78]" />
+                <span>Sign In</span>
+              </Link>
+
+              <Link
+                to={`/signup?redirect=${encodeURIComponent(location.pathname)}`}
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-[#4A2E2B] hover:bg-[#38221E] text-white text-xs font-bold transition-colors shadow-xs"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>Sign Up</span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>
