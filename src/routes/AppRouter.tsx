@@ -8,6 +8,9 @@ import { CartPage } from '../features/cart/pages/CartPage'
 import { CheckoutPage } from '../features/checkout/pages/CheckoutPage'
 import { OrderListPage } from '../features/orders/pages/OrderListPage'
 import { OrderDetailPage } from '../features/orders/pages/OrderDetailPage'
+import { RoomListPage } from '../features/rooms/pages/RoomListPage'
+import { RoomDetailPage } from '../features/rooms/pages/RoomDetailPage'
+import { ReservationListPage } from '../features/reservations/pages/ReservationListPage'
 
 export const AppRouter: React.FC = () => {
   return (
@@ -15,6 +18,9 @@ export const AppRouter: React.FC = () => {
       <Route path="/" element={<Navigate to="/cakes" replace />} />
       <Route path="/cakes" element={<CakeCatalogPage />} />
       <Route path="/cakes/:id" element={<CakeDetailPage />} />
+      <Route path="/rooms" element={<RoomListPage />} />
+      <Route path="/rooms/:id" element={<RoomDetailPage />} />
+      <Route path="/reservations" element={<ReservationListPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/orders" element={<OrderListPage />} />

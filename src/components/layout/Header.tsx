@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../hooks/useCart'
-import { ShoppingBag, Cake, Calendar, User as UserIcon, LogOut, UserPlus, LogIn } from 'lucide-react'
+import { ShoppingBag, Cake, Calendar, User as UserIcon, LogOut, UserPlus, LogIn, Sparkles } from 'lucide-react'
 
 export const Header: React.FC = () => {
   const location = useLocation()
@@ -105,6 +105,15 @@ export const Header: React.FC = () => {
                   >
                     <Calendar className="w-4 h-4 text-[#D86A78]" />
                     <span>My Orders</span>
+                  </Link>
+
+                  <Link
+                    to="/reservations"
+                    onClick={() => setShowUserMenu(false)}
+                    className="w-full px-3 py-2 text-left text-xs font-bold text-[#6E4E46] hover:bg-[#FAF2F0] hover:text-[#3B2219] rounded-xl flex items-center gap-2 transition-colors mb-1"
+                  >
+                    <Sparkles className="w-4 h-4 text-[#D86A78]" />
+                    <span>My Reservations</span>
                   </Link>
 
                   <button
