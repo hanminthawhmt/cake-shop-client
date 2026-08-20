@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../hooks/useCart'
 import { ShoppingBag, Cake, Calendar, User as UserIcon, LogOut, UserPlus, LogIn, Sparkles } from 'lucide-react'
 
+import { ServerWarmupBanner } from '../common/ServerWarmupBanner'
+
 export const Header: React.FC = () => {
   const location = useLocation()
   const { user, isLoggedIn, logout } = useAuth()
@@ -15,7 +17,9 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#F4E6E4] shadow-2xs">
+    <>
+      <ServerWarmupBanner />
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#F4E6E4] shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <Link to="/cakes" className="flex items-center gap-2.5 group">
@@ -160,6 +164,7 @@ export const Header: React.FC = () => {
           )}
         </div>
       </div>
-    </header>
+      </header>
+    </>
   )
 }
