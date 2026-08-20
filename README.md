@@ -3,9 +3,9 @@
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://petal-and-cocoa.vercel.app/cakes)
 [![React](https://img.shields.io/badge/React_19-TypeScript-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Vite](https://img.shields.io/badge/Vite- Build_Tool-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vite](https://img.shields.io/badge/Vite-Build_Tool-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
-> **Live Customer Storefront:** [https://petal-and-cocoa.vercel.app/cakes](https://petal-and-cocoa.vercel.app/cakes)
+> **Live Customer Storefront:** [https://petal-and-cocoa.vercel.app](https://petal-and-cocoa.vercel.app)
 
 Welcome to **Petal & Cocoa**, a warm, inviting customer-facing bakery web application. Built for cake lovers, this mobile-first storefront lets customers browse artisanal cakes, customize options, schedule pickup dates and time slots, track real-time order status, and reserve private birthday tea rooms.
 
