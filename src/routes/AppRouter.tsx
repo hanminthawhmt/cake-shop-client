@@ -4,6 +4,7 @@ import { CakeCatalogPage } from '../features/catalog/pages/CakeCatalogPage'
 import { CakeDetailPage } from '../features/cakes/pages/CakeDetailPage'
 import { LoginPage } from '../features/auth/pages/LoginPage'
 import { SignupPage } from '../features/auth/pages/SignupPage'
+import { AuthCallbackPage } from '../features/auth/pages/AuthCallbackPage'
 import { CartPage } from '../features/cart/pages/CartPage'
 import { CheckoutPage } from '../features/checkout/pages/CheckoutPage'
 import { OrderListPage } from '../features/orders/pages/OrderListPage'
@@ -12,6 +13,7 @@ import { RoomListPage } from '../features/rooms/pages/RoomListPage'
 import { RoomDetailPage } from '../features/rooms/pages/RoomDetailPage'
 import { ReservationListPage } from '../features/reservations/pages/ReservationListPage'
 import { ReservationDetailPage } from '../features/reservations/pages/ReservationDetailPage'
+import { ProfilePage } from '../features/profile/pages/ProfilePage'
 
 export const AppRouter: React.FC = () => {
   return (
@@ -27,8 +29,11 @@ export const AppRouter: React.FC = () => {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/orders" element={<OrderListPage />} />
       <Route path="/orders/:id" element={<OrderDetailPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/account" element={<ProfilePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="*" element={<Navigate to="/cakes" replace />} />
     </Routes>
   )

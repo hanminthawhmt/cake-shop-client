@@ -99,6 +99,15 @@ export const Header: React.FC = () => {
                   </div>
 
                   <Link
+                    to="/profile"
+                    onClick={() => setShowUserMenu(false)}
+                    className="w-full px-3 py-2 text-left text-xs font-bold text-[#6E4E46] hover:bg-[#FAF2F0] hover:text-[#3B2219] rounded-xl flex items-center gap-2 transition-colors"
+                  >
+                    <UserIcon className="w-4 h-4 text-[#D86A78]" />
+                    <span>My Profile</span>
+                  </Link>
+
+                  <Link
                     to="/orders"
                     onClick={() => setShowUserMenu(false)}
                     className="w-full px-3 py-2 text-left text-xs font-bold text-[#6E4E46] hover:bg-[#FAF2F0] hover:text-[#3B2219] rounded-xl flex items-center gap-2 transition-colors"

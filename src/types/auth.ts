@@ -1,3 +1,9 @@
+export interface UserProfile {
+  userId?: number
+  phone?: string
+  address?: string
+}
+
 export interface User {
   id: number
   name: string
@@ -5,6 +11,7 @@ export interface User {
   role?: string
   address?: string
   phone?: string
+  profile?: UserProfile
   createdAt?: string
   updatedAt?: string
 }
@@ -25,4 +32,14 @@ export interface AuthResponse {
   token?: string
   access_token?: string
   user?: User
+}
+
+export interface UpdateInfoDto {
+  address?: string
+  phone?: string
+}
+
+export interface ChangePasswordDto {
+  oldPassword?: string
+  newPassword?: string
 }

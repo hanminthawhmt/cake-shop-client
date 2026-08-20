@@ -11,6 +11,7 @@ interface AuthContextType {
   isLoading: boolean
   login: (data: SigninDto) => Promise<void>
   signup: (data: SignupDto) => Promise<void>
+  loginWithToken: (authToken: string) => Promise<void>
   logout: () => void
   refreshUser: () => Promise<void>
 }
@@ -59,6 +60,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
+  const loginWithToken = async (authToken: string) => {
+    await saveTokenAndFetchUser(authToken)
+  }
+
   const login = async (data: SigninDto) => {
     const res = await signinApi(data)
     const authToken = res.accessToken || res.token || res.access_token
@@ -95,6 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         login,
         signup,
+        loginWithToken,
         logout,
         refreshUser,
       }}
