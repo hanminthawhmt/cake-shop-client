@@ -130,8 +130,7 @@ src/
 ## 🔗 Related Links
 
 - **Live Storefront**: [https://petal-and-cocoa.vercel.app/cakes](https://petal-and-cocoa.vercel.app/cakes)
-- **Backend API Docs (OpenAPI/Swagger)**: `http://localhost:3000/api`
-
+- **Backend API Docs (OpenAPI/Swagger)**: [https://cake-shop-api-0qpr.onrender.com/api](https://cake-shop-api-0qpr.onrender.com/api)
 ---
 
 Developed with ❤️ for **Petal & Cocoa**.
