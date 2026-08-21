@@ -17,10 +17,11 @@ export const CakeCatalogPage: React.FC = () => {
   const {
     data: categories = [],
     isLoading: isCategoriesLoading,
+    refetch: refetchCategories,
   } = useQuery({
     queryKey: ['categories'],
     queryFn: fetchCategories,
-    staleTime: 1000 * 60 * 10, // 10 minutes
+    staleTime: 1000 * 60 * 10,
   })
 
   // Fetch cakes with query parameters for re-querying backend
@@ -28,6 +29,8 @@ export const CakeCatalogPage: React.FC = () => {
     data: cakes = [],
     isLoading: isCakesLoading,
     isError: isCakesError,
+    isFetching: isCakesFetching,
+    refetch: refetchCakes,
   } = useQuery({
     queryKey: ['cakes', { search, categoryId: selectedCategoryId }],
     queryFn: () =>
@@ -46,14 +49,12 @@ export const CakeCatalogPage: React.FC = () => {
     return map
   }, [categories])
 
-  // Filtered cakes (with client side fallback safeguard in case backend returns unfiltered list)
+  // Filtered cakes
   const filteredCakes = useMemo(() => {
     return cakes.filter((cake) => {
-      // Category match check
       if (selectedCategoryId !== null && cake.categoryId !== selectedCategoryId) {
         return false
       }
-      // Search term match check
       if (search.trim() !== '') {
         const query = search.toLowerCase().trim()
         const nameMatch = cake.name.toLowerCase().includes(query)
@@ -69,6 +70,11 @@ export const CakeCatalogPage: React.FC = () => {
   const handleResetFilters = () => {
     setSearch('')
     setSelectedCategoryId(null)
+  }
+
+  const handleRetry = () => {
+    refetchCakes()
+    refetchCategories()
   }
 
   return (
@@ -106,8 +112,10 @@ export const CakeCatalogPage: React.FC = () => {
             cakes={filteredCakes}
             isLoading={isCakesLoading}
             isError={isCakesError}
+            isFetching={isCakesFetching}
             categoryMap={categoryMap}
             onResetFilters={handleResetFilters}
+            onRetry={handleRetry}
           />
         </section>
       </main>

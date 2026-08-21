@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api-proxy/:path*",
+      "destination": "https://cake-shop-api-0qpr.onrender.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

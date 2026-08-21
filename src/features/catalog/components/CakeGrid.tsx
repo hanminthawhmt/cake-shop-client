@@ -1,22 +1,26 @@
 import React from 'react'
 import type { Cake } from '../../../types/cake'
 import { CakeCard } from './CakeCard'
-import { Cake as CakeIcon, RefreshCw, AlertCircle } from 'lucide-react'
+import { Cake as CakeIcon, RefreshCw, AlertCircle, Loader2 } from 'lucide-react'
 
 interface CakeGridProps {
   cakes: Cake[]
   isLoading: boolean
   isError: boolean
+  isFetching?: boolean
   categoryMap?: Record<number, string>
   onResetFilters?: () => void
+  onRetry?: () => void
 }
 
 export const CakeGrid: React.FC<CakeGridProps> = ({
   cakes,
   isLoading,
   isError,
+  isFetching = false,
   categoryMap,
   onResetFilters,
+  onRetry,
 }) => {
   // Loading skeleton layout
   if (isLoading) {
@@ -44,22 +48,30 @@ export const CakeGrid: React.FC<CakeGridProps> = ({
   // Error state
   if (isError) {
     return (
-      <div className="bg-red-50/70 border border-red-200 rounded-2xl p-8 text-center max-w-md mx-auto my-12">
-        <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
-        <h3 className="text-lg font-bold text-red-900 mb-1">
-          Unable to Load Cakes
-        </h3>
-        <p className="text-xs text-red-700 mb-4">
-          There was a problem communicating with our bakery catalog. Please check your connection and try again.
-        </p>
-        {onResetFilters && (
+      <div className="bg-red-50/70 border border-red-200 rounded-2xl p-8 text-center max-w-md mx-auto my-12 space-y-4">
+        <AlertCircle className="w-10 h-10 text-red-500 mx-auto" />
+        <div className="space-y-1">
+          <h3 className="text-lg font-bold text-red-900">
+            Unable to Load Cakes
+          </h3>
+          <p className="text-xs text-red-700 leading-relaxed">
+            There was a problem communicating with our bakery catalog. If the backend server was inactive, it may be waking up.
+          </p>
+        </div>
+
+        {onRetry && (
           <button
             type="button"
-            onClick={onResetFilters}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-semibold hover:bg-red-700 transition-colors"
+            onClick={onRetry}
+            disabled={isFetching}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
-            Retry
+            {isFetching ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <RefreshCw className="w-3.5 h-3.5" />
+            )}
+            <span>{isFetching ? 'Connecting to Server...' : 'Retry Connecting'}</span>
           </button>
         )}
       </div>
@@ -81,7 +93,7 @@ export const CakeGrid: React.FC<CakeGridProps> = ({
           <button
             type="button"
             onClick={onResetFilters}
-            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-[#4A2E2B] text-white rounded-xl text-xs font-bold hover:bg-[#38221E] transition-colors shadow-xs"
+            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-[#4A2E2B] text-white rounded-xl text-xs font-bold hover:bg-[#38221E] transition-colors shadow-xs cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Show All Cakes

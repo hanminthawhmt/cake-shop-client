@@ -11,6 +11,8 @@ export const RoomListPage: React.FC = () => {
     data: rooms = [],
     isLoading,
     isError,
+    isFetching,
+    refetch,
   } = useQuery({
     queryKey: ['rooms'],
     queryFn: fetchRooms,
@@ -64,14 +66,25 @@ export const RoomListPage: React.FC = () => {
 
         {/* Error State */}
         {isError && (
-          <div className="bg-red-50 border border-red-200 rounded-3xl p-8 text-center max-w-md mx-auto my-8">
-            <AlertCircle className="w-10 h-10 text-red-500 mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-red-900 mb-1">
-              Unable to Load Birthday Rooms
-            </h3>
-            <p className="text-xs text-red-700">
-              Please check your network connection and try refreshing the page.
-            </p>
+          <div className="bg-red-50 border border-red-200 rounded-3xl p-8 text-center max-w-md mx-auto my-8 space-y-4">
+            <AlertCircle className="w-10 h-10 text-red-500 mx-auto" />
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-red-900">
+                Unable to Load Birthday Rooms
+              </h3>
+              <p className="text-xs text-red-700">
+                Please check your network connection or allow a moment if the backend server is waking up.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+            >
+              <span>{isFetching ? 'Connecting to Server...' : 'Retry Connecting'}</span>
+            </button>
           </div>
         )}
 
