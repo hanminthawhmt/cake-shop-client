@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import type { Order } from '../../../types/orders'
 import { CheckCircle2, Calendar, Clock, ShoppingBag } from 'lucide-react'
+import { formatPrice } from '../../../utils/currency'
 
 interface OrderConfirmationModalProps {
   isOpen: boolean
@@ -16,10 +17,7 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
 }) => {
   if (!isOpen || !order) return null
 
-  const totalPriceFormatted =
-    typeof order.totalPrice === 'number'
-      ? order.totalPrice.toFixed(2)
-      : parseFloat(String(order.totalPrice || 0)).toFixed(2)
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
@@ -59,7 +57,7 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
 
           <div className="pt-2 border-t border-[#EFE2E0] flex items-center justify-between text-sm">
             <span className="font-bold text-[#3B2219]">Total Paid at Store</span>
-            <span className="font-black text-[#4A2E2B]">${totalPriceFormatted}</span>
+            <span className="font-black text-[#4A2E2B]">{formatPrice(order.totalPrice)}</span>
           </div>
         </div>
 

@@ -3,17 +3,13 @@ import { Link } from 'react-router-dom'
 import type { Order } from '../../../types/orders'
 import { OrderStatusBadge, PaymentStatusBadge } from './OrderStatusBadge'
 import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { formatPrice } from '../../../utils/currency'
 
 interface OrderCardProps {
   order: Order
 }
 
 export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
-  const formattedPrice =
-    typeof order.totalPrice === 'number'
-      ? order.totalPrice.toFixed(2)
-      : parseFloat(String(order.totalPrice || 0)).toFixed(2)
-
   const createdDate = new Date(order.createdAt).toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric',
@@ -36,7 +32,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
         </div>
 
         {/* Pickup & Placed Meta */}
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 text-xs text-[#7C5C54]">
+        <div className="flex wrap items-center gap-x-6 gap-y-1.5 text-xs text-[#7C5C54]">
           <div className="flex items-center gap-1.5 font-semibold text-[#3B2219]">
             <Calendar className="w-3.5 h-3.5 text-[#D86A78]" />
             <span>Pickup: {order.pickupDate}</span>
@@ -57,7 +53,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       <div className="flex items-center justify-between sm:justify-end gap-5 pt-3 sm:pt-0 border-t sm:border-t-0 border-[#F7EFEF]">
         <div className="text-left sm:text-right">
           <span className="text-[11px] text-[#9E7A70] block font-semibold">Total Price</span>
-          <span className="text-xl font-black text-[#4A2E2B]">${formattedPrice}</span>
+          <span className="text-xl font-black text-[#4A2E2B]">{formatPrice(order.totalPrice)}</span>
         </div>
 
         <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#D86A78] bg-[#FDF0F2] px-3.5 py-2 rounded-2xl group-hover:bg-[#FCE2E6] transition-colors">

@@ -1,6 +1,6 @@
 import React from 'react'
 import type { OrderStatus, PaymentStatus } from '../../../types/orders'
-import { CheckCircle2, Clock, PackageCheck, Sparkles, XCircle, DollarSign } from 'lucide-react'
+import { CheckCircle2, Clock, PackageCheck, Sparkles, XCircle, CreditCard } from 'lucide-react'
 
 interface OrderStatusBadgeProps {
   status: OrderStatus
@@ -58,7 +58,7 @@ export const PaymentStatusBadge: React.FC<{ paymentStatus: PaymentStatus }> = ({
   if (paymentStatus === 'paid') {
     return (
       <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-        <DollarSign className="w-3 h-3 text-emerald-600" />
+        <CreditCard className="w-3 h-3 text-emerald-600" />
         Paid
       </span>
     )

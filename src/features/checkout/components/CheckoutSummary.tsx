@@ -1,23 +1,14 @@
 import React from 'react'
 import type { Cart } from '../../../types/cart'
 import { Sparkles, MessageSquare, ShoppingBag } from 'lucide-react'
+import { SafeImage } from '../../../components/common/SafeImage'
+import { formatPrice } from '../../../utils/currency'
 
 interface CheckoutSummaryProps {
   cart: Cart
 }
 
-const FALLBACK_CAKE_IMAGES = [
-  'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=300&q=80',
-  'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=300&q=80',
-]
-
 export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
-  const cartTotalFormatted =
-    typeof cart.cartTotal === 'number'
-      ? cart.cartTotal.toFixed(2)
-      : parseFloat(String(cart.cartTotal || 0)).toFixed(2)
-
   return (
     <div className="bg-white rounded-3xl p-6 border border-[#F4E6E4] shadow-xs space-y-6">
       <div className="flex items-center justify-between border-b border-[#F7EFEF] pb-4">
@@ -34,30 +25,22 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
       <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
         {cart.items.map((item) => {
           const imageUrl =
-            item.cake.images && item.cake.images.length > 0
-              ? item.cake.images[0].url
-              : FALLBACK_CAKE_IMAGES[item.cake.id % FALLBACK_CAKE_IMAGES.length]
-
-          const unitPriceFormatted =
-            typeof item.unitPrice === 'number'
-              ? item.unitPrice.toFixed(2)
-              : parseFloat(String(item.unitPrice || 0)).toFixed(2)
-
-          const lineTotalFormatted =
-            typeof item.lineTotal === 'number'
-              ? item.lineTotal.toFixed(2)
-              : parseFloat(String(item.lineTotal || 0)).toFixed(2)
+            item.cake.images && item.cake.images.length > 0 ? item.cake.images[0].url : undefined
 
           return (
             <div
               key={item.id}
               className="flex items-center gap-3.5 p-3 rounded-2xl bg-[#FAF7F5] border border-[#F3E2E0]"
             >
-              <img
-                src={imageUrl}
-                alt={item.cake.name}
-                className="w-16 h-16 rounded-xl object-cover border border-[#EFE2E0] shrink-0"
-              />
+              <div className="w-16 h-16 rounded-xl overflow-hidden border border-[#EFE2E0] shrink-0 bg-[#FAF2F0]">
+                <SafeImage
+                  src={imageUrl}
+                  alt={item.cake.name}
+                  cakeId={item.cake.id}
+                  fallbackType="cake"
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
               <div className="flex-1 min-w-0 space-y-1">
                 <div className="flex items-center justify-between gap-2">
@@ -65,7 +48,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
                     {item.cake.name}
                   </h4>
                   <span className="text-xs font-bold text-[#4A2E2B] shrink-0">
-                    ${lineTotalFormatted}
+                    {formatPrice(item.lineTotal)}
                   </span>
                 </div>
 
@@ -86,7 +69,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
 
                 <div className="flex items-center justify-between text-[11px] text-[#8C6057]">
                   <span>
-                    Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × ${unitPriceFormatted}
+                    Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × {formatPrice(item.unitPrice)}
                   </span>
                   {item.notes && (
                     <span className="truncate max-w-[140px] italic inline-flex items-center gap-0.5 text-[#D86A78]">
@@ -105,7 +88,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
       <div className="pt-4 border-t-2 border-[#EAD7D5] flex items-center justify-between">
         <div>
           <span className="text-xs text-[#9E7A70] font-semibold block">Total Amount</span>
-          <span className="text-2xl font-black text-[#4A2E2B]">${cartTotalFormatted}</span>
+          <span className="text-2xl font-black text-[#4A2E2B]">{formatPrice(cart.cartTotal)}</span>
         </div>
         <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold">
           Pay at Storefront

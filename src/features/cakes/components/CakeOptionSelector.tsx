@@ -1,6 +1,7 @@
 import React from 'react'
 import type { CakeOption } from '../../../types/cake'
 import { Check } from 'lucide-react'
+import { formatModifier } from '../../../utils/currency'
 
 interface CakeOptionSelectorProps {
   options: CakeOption[]
@@ -37,8 +38,7 @@ export const CakeOptionSelector: React.FC<CakeOptionSelectorProps> = ({
               {option.values.map((val) => {
                 const isSelected = selectedValueId === val.id
                 const modifier = parseFloat(String(val.priceModifier || '0'))
-                const formattedModifier =
-                  modifier > 0 ? `+$${modifier.toFixed(2)}` : 'Included'
+                const formattedModifier = formatModifier(val.priceModifier)
 
                 return (
                   <button

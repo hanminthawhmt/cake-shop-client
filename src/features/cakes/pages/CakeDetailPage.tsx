@@ -10,6 +10,7 @@ import { CakeImageGallery } from '../components/CakeImageGallery'
 import { CakeOptionSelector } from '../components/CakeOptionSelector'
 import { CakePriceSummary } from '../components/CakePriceSummary'
 import { AuthPromptModal } from '../components/AuthPromptModal'
+import { formatPrice } from '../../../utils/currency'
 import {
   ArrowLeft,
   Sparkles,
@@ -121,7 +122,7 @@ export const CakeDetailPage: React.FC = () => {
       })
 
       setAddedSuccessMsg(
-        `Successfully added ${quantity}x "${cake?.name}" ($${totalPrice.toFixed(2)}) to your cart!`
+        `Successfully added ${quantity}x "${cake?.name}" (${formatPrice(totalPrice)}) to your cart!`
       )
 
       // Auto dismiss success toast after 5 seconds
@@ -326,7 +327,7 @@ export const CakeDetailPage: React.FC = () => {
                   {isAdding
                     ? 'Adding to Cart...'
                     : cake.isAvailable
-                    ? `Add to Cart — $${totalPrice.toFixed(2)}`
+                    ? `Add to Cart — ${formatPrice(totalPrice)}`
                     : 'Currently Unavailable'}
                 </span>
               </button>
