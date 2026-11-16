@@ -6,8 +6,6 @@ import { useAuth } from '../../../context/AuthContext'
 import { Header } from '../../../components/layout/Header'
 import { Footer } from '../../../components/layout/Footer'
 import { OrderStatusBadge, PaymentStatusBadge } from '../components/OrderStatusBadge'
-import { SafeImage } from '../../../components/common/SafeImage'
-import { formatPrice } from '../../../utils/currency'
 import {
   ArrowLeft,
   Calendar,
@@ -18,6 +16,12 @@ import {
   XCircle,
   CheckCircle2,
 } from 'lucide-react'
+
+const FALLBACK_CAKE_IMAGES = [
+  'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=400&q=80',
+  'https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=400&q=80',
+  'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=400&q=80',
+]
 
 export const OrderDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -70,6 +74,11 @@ export const OrderDetailPage: React.FC = () => {
 
   const isCancellable =
     order && order.status !== 'completed' && order.status !== 'cancelled'
+
+  const formattedTotalPrice =
+    order && typeof order.totalPrice === 'number'
+      ? order.totalPrice.toFixed(2)
+      : parseFloat(String(order?.totalPrice || 0)).toFixed(2)
 
   return (
     <div className="min-h-screen bg-[#FAF7F5] flex flex-col text-[#3B2219] font-sans antialiased">
@@ -190,7 +199,20 @@ export const OrderDetailPage: React.FC = () => {
               <div className="space-y-4">
                 {order.items &&
                   order.items.map((item) => {
-                    const imageUrl = item.cake?.images && item.cake.images.length > 0 ? item.cake.images[0].url : undefined
+                    const imageUrl =
+                      item.cake?.images && item.cake.images.length > 0
+                        ? item.cake.images[0].url
+                        : FALLBACK_CAKE_IMAGES[item.id % FALLBACK_CAKE_IMAGES.length]
+
+                    const unitPriceFormatted =
+                      typeof item.unitPrice === 'number'
+                        ? item.unitPrice.toFixed(2)
+                        : parseFloat(String(item.unitPrice || 0)).toFixed(2)
+
+                    const lineTotalFormatted =
+                      typeof item.totalPrice === 'number'
+                        ? item.totalPrice.toFixed(2)
+                        : parseFloat(String(item.totalPrice || 0)).toFixed(2)
 
                     return (
                       <div
@@ -198,15 +220,11 @@ export const OrderDetailPage: React.FC = () => {
                         className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#FAF7F5] border border-[#F3E2E0]"
                       >
                         <div className="flex items-center gap-4 flex-1 min-w-0">
-                          <div className="w-16 h-16 rounded-2xl overflow-hidden border border-[#EFE2E0] shrink-0 bg-[#FAF2F0]">
-                            <SafeImage
-                              src={imageUrl}
-                              alt={item.cakeName || item.cake?.name || 'Cake'}
-                              cakeId={item.cake?.id || item.cakeId || item.id}
-                              fallbackType="cake"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
+                          <img
+                            src={imageUrl}
+                            alt={item.cakeName || 'Cake'}
+                            className="w-16 h-16 rounded-2xl object-cover border border-[#EFE2E0] shrink-0"
+                          />
 
                           <div className="space-y-1 min-w-0">
                             <h4 className="font-extrabold text-sm sm:text-base text-[#3B2219] truncate">
@@ -241,10 +259,10 @@ export const OrderDetailPage: React.FC = () => {
                         {/* Line Total */}
                         <div className="text-left sm:text-right w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-[#EFE2E0]">
                           <div className="text-xs text-[#8C6057]">
-                            Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × {formatPrice(item.unitPrice)}
+                            Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × ${unitPriceFormatted}
                           </div>
                           <div className="text-base font-black text-[#4A2E2B]">
-                            {formatPrice(item.totalPrice)}
+                            ${lineTotalFormatted}
                           </div>
                         </div>
                       </div>
@@ -257,7 +275,7 @@ export const OrderDetailPage: React.FC = () => {
                 <div>
                   <span className="text-xs text-[#9E7A70] font-semibold block">Total Price</span>
                   <span className="text-2xl font-black text-[#4A2E2B]">
-                    {formatPrice(order.totalPrice)}
+                    ${formattedTotalPrice}
                   </span>
                 </div>
 

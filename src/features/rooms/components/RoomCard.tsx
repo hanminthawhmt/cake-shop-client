@@ -2,15 +2,27 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import type { Room } from '../../../types/room'
 import { Users, ArrowRight } from 'lucide-react'
-import { SafeImage } from '../../../components/common/SafeImage'
-import { formatPrice } from '../../../utils/currency'
 
 interface RoomCardProps {
   room: Room
 }
 
+const FALLBACK_ROOM_IMAGES = [
+  'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1544077960-604201fe74bc?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=800&q=80',
+]
+
 export const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
-  const imageUrl = room.images && room.images.length > 0 ? room.images[0].url : undefined
+  const imageUrl =
+    room.images && room.images.length > 0
+      ? room.images[0].url
+      : FALLBACK_ROOM_IMAGES[room.id % FALLBACK_ROOM_IMAGES.length]
+
+  const formattedPrice =
+    typeof room.price === 'number'
+      ? room.price.toFixed(2)
+      : parseFloat(String(room.price || 0)).toFixed(2)
 
   return (
     <Link
@@ -19,11 +31,9 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
     >
       {/* Image Container */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#FAF2F0]">
-        <SafeImage
+        <img
           src={imageUrl}
           alt={room.name}
-          roomId={room.id}
-          fallbackType="room"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
           loading="lazy"
         />
@@ -60,7 +70,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
           <div>
             <span className="text-[11px] text-[#9E7A70] block font-semibold">Reservation Rate</span>
             <span className="text-xl font-black text-[#4A2E2B]">
-              {formatPrice(room.price)}
+              ${formattedPrice}
             </span>
           </div>
 

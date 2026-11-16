@@ -7,8 +7,6 @@ import type { Reservation } from '../../../types/room'
 import { Header } from '../../../components/layout/Header'
 import { Footer } from '../../../components/layout/Footer'
 import { AuthPromptModal } from '../../cakes/components/AuthPromptModal'
-import { SafeImage } from '../../../components/common/SafeImage'
-import { formatPrice } from '../../../utils/currency'
 import {
   ArrowLeft,
   Calendar as CalendarIcon,
@@ -21,6 +19,11 @@ import {
   CheckCircle2,
   Lock,
 } from 'lucide-react'
+
+const FALLBACK_ROOM_IMAGES = [
+  'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1544077960-604201fe74bc?auto=format&fit=crop&w=1000&q=80',
+]
 
 export const RoomDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -111,7 +114,15 @@ export const RoomDetailPage: React.FC = () => {
     })
   }
 
+  const imageUrl =
+    room && room.images && room.images.length > 0
+      ? room.images[0].url
+      : FALLBACK_ROOM_IMAGES[roomId % FALLBACK_ROOM_IMAGES.length]
 
+  const formattedPrice =
+    room && typeof room.price === 'number'
+      ? room.price.toFixed(2)
+      : parseFloat(String(room?.price || 0)).toFixed(2)
 
   return (
     <div className="min-h-screen bg-[#FAF7F5] flex flex-col text-[#3B2219] font-sans antialiased">
@@ -162,11 +173,9 @@ export const RoomDetailPage: React.FC = () => {
             {/* Left Column: Room Photo & Description */}
             <div className="lg:col-span-6 space-y-6">
               <div className="relative aspect-[16/10] w-full rounded-3xl overflow-hidden bg-[#FAF2F0] border border-[#F4E6E4] shadow-xs">
-                <SafeImage
-                  src={room.images && room.images.length > 0 ? room.images[0].url : undefined}
+                <img
+                  src={imageUrl}
                   alt={room.name}
-                  roomId={room.id}
-                  fallbackType="room"
                   className="w-full h-full object-cover"
                 />
                 <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-[#6E3C33] border border-[#F3D5CF] flex items-center gap-1.5 shadow-xs">
@@ -182,7 +191,7 @@ export const RoomDetailPage: React.FC = () => {
                   </h1>
                   <div className="text-right">
                     <span className="text-[11px] text-[#9E7A70] block font-semibold">Rate</span>
-                    <span className="text-xl font-black text-[#4A2E2B]">{formatPrice(room.price)}</span>
+                    <span className="text-xl font-black text-[#4A2E2B]">${formattedPrice}</span>
                   </div>
                 </div>
 

@@ -2,22 +2,37 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import type { Cake } from '../../../types/cake'
 import { ArrowRight, Sparkles } from 'lucide-react'
-import { SafeImage } from '../../../components/common/SafeImage'
-import { formatPrice } from '../../../utils/currency'
 
 interface CakeCardProps {
   cake: Cake
   categoryMap?: Record<number, string>
 }
 
+// Fallback high quality cake photography URLs for visual warmth if image array is empty
+const FALLBACK_CAKE_IMAGES = [
+  'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=800&q=80',
+]
+
 export const CakeCard: React.FC<CakeCardProps> = ({ cake, categoryMap }) => {
-  const imageUrl = cake.images && cake.images.length > 0 ? cake.images[0].url : undefined
+  // Get image URL or pick fallback based on cake ID
+  const imageUrl =
+    cake.images && cake.images.length > 0
+      ? cake.images[0].url
+      : FALLBACK_CAKE_IMAGES[cake.id % FALLBACK_CAKE_IMAGES.length]
 
   // Category name lookup
   const categoryName =
     cake.category?.name ||
     (categoryMap && categoryMap[cake.categoryId]) ||
     'Freshly Baked'
+
+  const formattedPrice =
+    typeof cake.basePrice === 'number'
+      ? cake.basePrice.toFixed(2)
+      : parseFloat(cake.basePrice || '0').toFixed(2)
 
   return (
     <Link
@@ -26,11 +41,9 @@ export const CakeCard: React.FC<CakeCardProps> = ({ cake, categoryMap }) => {
     >
       {/* Image Container */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FAF2F0]">
-        <SafeImage
+        <img
           src={imageUrl}
           alt={cake.name}
-          cakeId={cake.id}
-          fallbackType="cake"
           className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out"
           loading="lazy"
         />
@@ -66,7 +79,7 @@ export const CakeCard: React.FC<CakeCardProps> = ({ cake, categoryMap }) => {
           <div>
             <span className="text-xs text-[#9E7A70] block">Starting from</span>
             <span className="text-xl font-extrabold text-[#4A2E2B]">
-              {formatPrice(cake.basePrice)}
+              ${formattedPrice}
             </span>
           </div>
 

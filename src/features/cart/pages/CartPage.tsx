@@ -5,7 +5,6 @@ import { useAuth } from '../../../context/AuthContext'
 import { Header } from '../../../components/layout/Header'
 import { Footer } from '../../../components/layout/Footer'
 import { CartItemRow } from '../components/CartItemRow'
-import { formatPrice } from '../../../utils/currency'
 import {
   ShoppingBag,
   ArrowRight,
@@ -38,7 +37,10 @@ export const CartPage: React.FC = () => {
     navigate('/checkout')
   }
 
-
+  const cartTotalFormatted =
+    cart && typeof cart.cartTotal === 'number'
+      ? cart.cartTotal.toFixed(2)
+      : parseFloat(String(cart?.cartTotal || 0)).toFixed(2)
 
   return (
     <div className="min-h-screen bg-[#FAF7F5] flex flex-col text-[#3B2219] font-sans antialiased">
@@ -169,7 +171,7 @@ export const CartPage: React.FC = () => {
 
                 <div className="flex justify-between items-center pt-2 border-t border-[#F7EFEF]">
                   <span>Subtotal</span>
-                  <span className="font-bold text-[#3B2219]">{formatPrice(cart?.cartTotal)}</span>
+                  <span className="font-bold text-[#3B2219]">${cartTotalFormatted}</span>
                 </div>
               </div>
 
@@ -178,7 +180,7 @@ export const CartPage: React.FC = () => {
                 <div>
                   <span className="text-xs text-[#9E7A70] block font-semibold">Total Price</span>
                   <span className="text-2xl font-black text-[#4A2E2B]">
-                    {formatPrice(cart?.cartTotal)}
+                    ${cartTotalFormatted}
                   </span>
                 </div>
               </div>

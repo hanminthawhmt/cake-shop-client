@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import type { CakeImage } from '../../../types/cake'
 import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
-import { SafeImage, FALLBACK_CAKE_IMAGES } from '../../../components/common/SafeImage'
 
 interface CakeImageGalleryProps {
   images?: CakeImage[]
@@ -9,17 +8,21 @@ interface CakeImageGalleryProps {
   cakeId: number
 }
 
+const FALLBACK_CAKE_IMAGES = [
+  'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=1000&q=80',
+  'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=1000&q=80',
+]
+
 export const CakeImageGallery: React.FC<CakeImageGalleryProps> = ({
   images = [],
   cakeName,
   cakeId,
 }) => {
-  const validImages = images
-    .filter((img) => img && typeof img.url === 'string' && img.url.trim() !== '')
-    .map((img) => img.url.trim())
-
-  const fallbackUrl = FALLBACK_CAKE_IMAGES[Math.abs(cakeId) % FALLBACK_CAKE_IMAGES.length]
-  const displayImages = validImages.length > 0 ? validImages : [fallbackUrl]
+  const displayImages =
+    images.length > 0
+      ? images.map((img) => img.url)
+      : [FALLBACK_CAKE_IMAGES[cakeId % FALLBACK_CAKE_IMAGES.length]]
 
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
@@ -35,12 +38,9 @@ export const CakeImageGallery: React.FC<CakeImageGalleryProps> = ({
     <div className="flex flex-col gap-4">
       {/* Main Active Image Container */}
       <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-[#FAF2F0] border border-[#F4E6E4] shadow-xs group">
-        <SafeImage
+        <img
           src={displayImages[activeImageIndex]}
           alt={`${cakeName} photo ${activeImageIndex + 1}`}
-          cakeId={cakeId}
-          fallbackType="cake"
-          fallbackSrc={fallbackUrl}
           className="w-full h-full object-cover object-center transition-all duration-300"
         />
 
@@ -87,12 +87,9 @@ export const CakeImageGallery: React.FC<CakeImageGalleryProps> = ({
                   : 'border-[#F3E2E0] opacity-70 hover:opacity-100'
               }`}
             >
-              <SafeImage
+              <img
                 src={imgUrl}
                 alt={`Thumbnail ${idx + 1}`}
-                cakeId={cakeId + idx}
-                fallbackType="cake"
-                fallbackSrc={fallbackUrl}
                 className="w-full h-full object-cover"
               />
             </button>
