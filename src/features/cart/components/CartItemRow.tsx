@@ -74,7 +74,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
                   <Sparkles className="w-2.5 h-2.5 text-[#E87A84]" />
                   {val.label}
                   {parseFloat(String(val.priceModifier || '0')) > 0
-                    ? ` (+$${parseFloat(String(val.priceModifier)).toFixed(2)})`
+                    ? ` (+฿${parseFloat(String(val.priceModifier)).toFixed(2)})`
                     : ''}
                 </span>
               ))}
@@ -161,10 +161,10 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
         {/* Price Breakdown */}
         <div className="text-right">
           <div className="text-xs text-[#9E7A70]">
-            ${typeof item.unitPrice === 'number' ? item.unitPrice.toFixed(2) : parseFloat(item.unitPrice || '0').toFixed(2)} each
+            ฿{typeof item.unitPrice === 'number' ? item.unitPrice.toFixed(2) : parseFloat(item.unitPrice || '0').toFixed(2)} each
           </div>
           <div className="text-lg font-black text-[#4A2E2B]">
-            ${typeof item.lineTotal === 'number' ? item.lineTotal.toFixed(2) : parseFloat(item.lineTotal || '0').toFixed(2)}
+            ฿{typeof item.lineTotal === 'number' ? item.lineTotal.toFixed(2) : parseFloat(item.lineTotal || '0').toFixed(2)}
           </div>
         </div>
 

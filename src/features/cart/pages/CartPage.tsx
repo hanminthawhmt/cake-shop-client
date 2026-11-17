@@ -171,7 +171,7 @@ export const CartPage: React.FC = () => {
 
                 <div className="flex justify-between items-center pt-2 border-t border-[#F7EFEF]">
                   <span>Subtotal</span>
-                  <span className="font-bold text-[#3B2219]">${cartTotalFormatted}</span>
+                  <span className="font-bold text-[#3B2219]">฿{cartTotalFormatted}</span>
                 </div>
               </div>
 
@@ -180,7 +180,7 @@ export const CartPage: React.FC = () => {
                 <div>
                   <span className="text-xs text-[#9E7A70] block font-semibold">Total Price</span>
                   <span className="text-2xl font-black text-[#4A2E2B]">
-                    ${cartTotalFormatted}
+                    ฿{cartTotalFormatted}
                   </span>
                 </div>
               </div>

@@ -191,7 +191,7 @@ export const RoomDetailPage: React.FC = () => {
                   </h1>
                   <div className="text-right">
                     <span className="text-[11px] text-[#9E7A70] block font-semibold">Rate</span>
-                    <span className="text-xl font-black text-[#4A2E2B]">${formattedPrice}</span>
+                    <span className="text-xl font-black text-[#4A2E2B]">฿{formattedPrice}</span>
                   </div>
                 </div>
 

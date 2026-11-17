@@ -38,7 +38,7 @@ export const CakeOptionSelector: React.FC<CakeOptionSelectorProps> = ({
                 const isSelected = selectedValueId === val.id
                 const modifier = parseFloat(String(val.priceModifier || '0'))
                 const formattedModifier =
-                  modifier > 0 ? `+$${modifier.toFixed(2)}` : 'Included'
+                  modifier > 0 ? `+฿${modifier.toFixed(2)}` : 'Included'
 
                 return (
                   <button

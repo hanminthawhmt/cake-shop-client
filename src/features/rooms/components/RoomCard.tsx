@@ -70,7 +70,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
           <div>
             <span className="text-[11px] text-[#9E7A70] block font-semibold">Reservation Rate</span>
             <span className="text-xl font-black text-[#4A2E2B]">
-              ${formattedPrice}
+              ฿{formattedPrice}
             </span>
           </div>
 

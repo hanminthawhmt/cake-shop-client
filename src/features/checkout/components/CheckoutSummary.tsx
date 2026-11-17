@@ -65,7 +65,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
                     {item.cake.name}
                   </h4>
                   <span className="text-xs font-bold text-[#4A2E2B] shrink-0">
-                    ${lineTotalFormatted}
+                    ฿{lineTotalFormatted}
                   </span>
                 </div>
 
@@ -86,7 +86,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
 
                 <div className="flex items-center justify-between text-[11px] text-[#8C6057]">
                   <span>
-                    Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × ${unitPriceFormatted}
+                    Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × ฿{unitPriceFormatted}
                   </span>
                   {item.notes && (
                     <span className="truncate max-w-[140px] italic inline-flex items-center gap-0.5 text-[#D86A78]">
@@ -105,7 +105,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({ cart }) => {
       <div className="pt-4 border-t-2 border-[#EAD7D5] flex items-center justify-between">
         <div>
           <span className="text-xs text-[#9E7A70] font-semibold block">Total Amount</span>
-          <span className="text-2xl font-black text-[#4A2E2B]">${cartTotalFormatted}</span>
+          <span className="text-2xl font-black text-[#4A2E2B]">฿{cartTotalFormatted}</span>
         </div>
         <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold">
           Pay at Storefront

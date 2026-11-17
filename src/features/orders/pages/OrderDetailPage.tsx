@@ -259,10 +259,10 @@ export const OrderDetailPage: React.FC = () => {
                         {/* Line Total */}
                         <div className="text-left sm:text-right w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-[#EFE2E0]">
                           <div className="text-xs text-[#8C6057]">
-                            Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × ${unitPriceFormatted}
+                            Qty: <strong className="text-[#3B2219]">{item.quantity}</strong> × ฿{unitPriceFormatted}
                           </div>
                           <div className="text-base font-black text-[#4A2E2B]">
-                            ${lineTotalFormatted}
+                            ฿{lineTotalFormatted}
                           </div>
                         </div>
                       </div>
@@ -275,7 +275,7 @@ export const OrderDetailPage: React.FC = () => {
                 <div>
                   <span className="text-xs text-[#9E7A70] font-semibold block">Total Price</span>
                   <span className="text-2xl font-black text-[#4A2E2B]">
-                    ${formattedTotalPrice}
+                    ฿{formattedTotalPrice}
                   </span>
                 </div>
 

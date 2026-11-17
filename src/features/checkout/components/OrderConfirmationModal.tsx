@@ -59,7 +59,7 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
 
           <div className="pt-2 border-t border-[#EFE2E0] flex items-center justify-between text-sm">
             <span className="font-bold text-[#3B2219]">Total Paid at Store</span>
-            <span className="font-black text-[#4A2E2B]">${totalPriceFormatted}</span>
+            <span className="font-black text-[#4A2E2B]">฿{totalPriceFormatted}</span>
           </div>
         </div>
 

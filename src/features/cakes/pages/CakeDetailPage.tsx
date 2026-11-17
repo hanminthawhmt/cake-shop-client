@@ -121,7 +121,7 @@ export const CakeDetailPage: React.FC = () => {
       })
 
       setAddedSuccessMsg(
-        `Successfully added ${quantity}x "${cake?.name}" ($${totalPrice.toFixed(2)}) to your cart!`
+        `Successfully added ${quantity}x "${cake?.name}" (฿${totalPrice.toFixed(2)}) to your cart!`
       )
 
       // Auto dismiss success toast after 5 seconds
@@ -326,7 +326,7 @@ export const CakeDetailPage: React.FC = () => {
                   {isAdding
                     ? 'Adding to Cart...'
                     : cake.isAvailable
-                    ? `Add to Cart — $${totalPrice.toFixed(2)}`
+                    ? `Add to Cart — ฿${totalPrice.toFixed(2)}`
                     : 'Currently Unavailable'}
                 </span>
               </button>

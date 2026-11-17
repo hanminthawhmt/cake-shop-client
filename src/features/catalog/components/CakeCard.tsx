@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Cake } from '../../../types/cake'
 import { ArrowRight, Sparkles } from 'lucide-react'
@@ -17,11 +17,12 @@ const FALLBACK_CAKE_IMAGES = [
 ]
 
 export const CakeCard: React.FC<CakeCardProps> = ({ cake, categoryMap }) => {
-  // Get image URL or pick fallback based on cake ID
-  const imageUrl =
-    cake.images && cake.images.length > 0
-      ? cake.images[0].url
-      : FALLBACK_CAKE_IMAGES[cake.id % FALLBACK_CAKE_IMAGES.length]
+  const primaryImageUrl = cake.images?.[0]?.url
+  const fallbackImageUrl = FALLBACK_CAKE_IMAGES[cake.id % FALLBACK_CAKE_IMAGES.length]
+  const [imageState, setImageState] = useState<'primary' | 'fallback' | 'failed'>(
+    primaryImageUrl ? 'primary' : 'fallback',
+  )
+  const imageUrl = imageState === 'primary' ? primaryImageUrl : fallbackImageUrl
 
   // Category name lookup
   const categoryName =
@@ -41,12 +42,19 @@ export const CakeCard: React.FC<CakeCardProps> = ({ cake, categoryMap }) => {
     >
       {/* Image Container */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FAF2F0]">
-        <img
-          src={imageUrl}
-          alt={cake.name}
-          className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out"
-          loading="lazy"
-        />
+        {imageState !== 'failed' && (
+          <img
+            src={imageUrl}
+            alt={cake.name}
+            className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out"
+            loading="lazy"
+            onError={() =>
+              setImageState((current) =>
+                current === 'primary' ? 'fallback' : 'failed',
+              )
+            }
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
         {/* Category Pill */}
@@ -79,7 +87,7 @@ export const CakeCard: React.FC<CakeCardProps> = ({ cake, categoryMap }) => {
           <div>
             <span className="text-xs text-[#9E7A70] block">Starting from</span>
             <span className="text-xl font-extrabold text-[#4A2E2B]">
-              ${formattedPrice}
+              ฿{formattedPrice}
             </span>
           </div>
 

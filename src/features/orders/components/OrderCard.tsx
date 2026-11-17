@@ -57,7 +57,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       <div className="flex items-center justify-between sm:justify-end gap-5 pt-3 sm:pt-0 border-t sm:border-t-0 border-[#F7EFEF]">
         <div className="text-left sm:text-right">
           <span className="text-[11px] text-[#9E7A70] block font-semibold">Total Price</span>
-          <span className="text-xl font-black text-[#4A2E2B]">${formattedPrice}</span>
+          <span className="text-xl font-black text-[#4A2E2B]">฿{formattedPrice}</span>
         </div>
 
         <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#D86A78] bg-[#FDF0F2] px-3.5 py-2 rounded-2xl group-hover:bg-[#FCE2E6] transition-colors">
